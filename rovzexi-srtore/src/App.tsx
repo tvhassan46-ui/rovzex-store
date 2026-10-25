@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useState, type FormEvent, type ReactNode } from 'react'
+import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
@@ -43,9 +43,6 @@ const loadProducts = (): Product[] => {
       stock: saved.stock ?? 0,
       image: saved.image ?? imageFallback,
       description: saved.description ?? '',
-      brand: 'ROVZEXI',
-      brandMark: 'R',
-      accent: '#c8ff35',
       ...defaultProductGuidance,
     }
     return {
@@ -61,10 +58,6 @@ const loadProducts = (): Product[] => {
       image: saved.image ?? base.image,
       tag: saved.tag ?? base.tag,
       description: saved.description ?? base.description,
-      brand: saved.brand ?? base.brand,
-      brandMark: saved.brandMark ?? base.brandMark,
-      accent: saved.accent ?? base.accent,
-      brandImage: saved.brandImage ?? base.brandImage,
       highlights: Array.isArray(saved.highlights) ? saved.highlights : base.highlights ?? defaultProductGuidance.highlights,
       howToUse: Array.isArray(saved.howToUse) ? saved.howToUse : base.howToUse ?? defaultProductGuidance.howToUse,
     }
@@ -171,69 +164,6 @@ function ProductCard({ product, onOrder, onQuick, onWish, wishlist }: { product:
   </motion.article>
 }
 
-function SoftwareBrandBadge({ product, large = false }: { product: Product; large?: boolean }) {
-  const [light, dark] = softwareMarkColors[product.id] ?? ['#baff45', '#24c5a8']
-  const isCustomLogo = Boolean(product.brandImage)
-
-  return <div className={`flex items-center ${large ? 'gap-4' : 'flex-col gap-2'}`}>
-    <span style={{
-      color: light,
-      borderColor: `${light}88`,
-      background: isCustomLogo ? 'linear-gradient(135deg, rgba(255,255,255,0.96), rgba(234,240,236,0.96) 50%, rgba(200,255,53,0.15))' : `linear-gradient(145deg, ${light}2e, #131715 60%, ${dark}55)`,
-      boxShadow: isCustomLogo ? `0 16px 28px ${dark}40, inset 2px 2px 4px rgba(255,255,255,.9), inset -8px -8px 16px rgba(0,0,0,.18)` : `inset 2px 2px 5px #ffffff35, inset -4px -5px 8px #0000008c, 0 12px 32px ${dark}70`,
-    }} className={`grid shrink-0 place-items-center overflow-hidden border backdrop-blur-xl ${large ? 'h-[84px] w-[92px] rounded-2xl p-1.5' : 'h-[68px] w-[72px] rounded-[18px] p-1'}`}>
-      {isCustomLogo
-        ? <img src={product.brandImage} alt={`Logo fourni pour ${product.name}`} className="max-h-full max-w-full object-contain p-1.5 drop-shadow-[0_8px_10px_rgba(12,16,12,0.16)]"/>
-        : <SoftwareMark product={product} size={large ? 52 : 44}/>}
-    </span>
-    <span className={large ? 'text-left' : 'text-center'}>
-      {large && <span className="mb-1 block text-[8px] uppercase tracking-[.2em] text-white/50">{product.brandImage ? 'Logo officiel' : 'Symbole original'}</span>}
-      <span className={`block font-display font-semibold tracking-[.12em] text-white ${large ? 'text-[11px]' : 'text-[9px]'}`}>{product.brand}</span>
-      {!large && <span className="mt-1 block text-[8px] text-white/55">{product.brandImage ? 'Logo additionnel' : 'Création ROVZEXI · non officiel'}</span>}
-    </span>
-  </div>
-}
-
-const softwareMarkColors: Record<string, [string, string]> = {
-  sw1: ['#ff9a55', '#e33d36'], sw2: ['#74f0cf', '#3f72ed'],
-  sw4: ['#ffcf6a', '#eb643e'],
-  sw5: ['#ef92ff', '#8f4ee8'], sw6: ['#7be8b4', '#198b83'],
-  sw7: ['#65c9ff', '#3657e8'], sw8: ['#ffc568', '#ef7136'],
-  sw9: ['#c09aff', '#7048e8'], sw10: ['#ff83b6', '#c33e8a'],
-  sw11: ['#73c6ff', '#3865d9'], sw12: ['#7de7ff', '#3289c8'],
-  sw13: ['#b7f36c', '#3eaa75'], sw14: ['#e2ff79', '#26b8a3'],
-  sw15: ['#ffad70', '#d94f3c'], sw16: ['#7cf0d4', '#5180ec'],
-}
-
-function SoftwareMark({ product, size }: { product: Product; size: number }) {
-  const instanceId = useId().replace(/:/g, '')
-  const marks: Record<string, ReactNode> = {
-    sw1: <g><path d="M12 34V13h21M17 34h19M19 18v10m6-10v6m6-6v10" /><path d="m13 33 18-18 5 5-18 18h-5z" /><circle cx="33" cy="14" r="1.5" fill="currentColor" /></g>,
-    sw2: <g><circle cx="24" cy="24" r="4" fill="currentColor" /><path d="M24 20c-3-4-2-12 2-12s5 8 1 12m1 2c5-1 12 3 10 7s-9 0-11-4m-1 3c1 5-3 12-7 10s0-9 4-11m-3-1c-5 1-12-3-10-7s9 0 11 4m2 4c4 3 5 11 1 12s-5-8-1-12" /></g>,
-    sw4: <g><path d="m24 6 17 9v18l-17 9-17-9V15zM7 15l17 10 17-10M24 25v17" /><path d="m15 11 17 10v9" /></g>,
-    sw5: <g><circle cx="24" cy="24" r="14" /><path d="M10 24c4-8 23-12 28-4M11 28c8 5 20 7 26 1M24 10c-6 7-8 18-2 28" /><circle cx="36" cy="14" r="2" fill="currentColor" /></g>,
-    sw6: <g><path d="M11 16h14a7 7 0 0 1 0 14H13a6 6 0 0 0 0 12h21M30 12l6 4-6 4" /><circle cx="14" cy="23" r="3" /><circle cx="34" cy="36" r="3" /></g>,
-    sw7: <g><rect x="8" y="9" width="32" height="30" rx="4" /><circle cx="30" cy="18" r="3" /><path d="m11 33 9-9 6 6 4-4 7 8" /><path d="M14 13h8" /></g>,
-    sw8: <g><path d="M10 35c5-17 21-17 28-6M10 35c7 3 20 4 28-6" /><circle cx="10" cy="35" r="3" fill="currentColor" /><circle cx="38" cy="29" r="3" fill="currentColor" /><circle cx="24" cy="25" r="2" /><path d="M24 23v-8" /></g>,
-    sw9: <g><path d="M9 13h19M9 21h25M9 29h17M9 37h20" /><path d="m31 24 11 7-11 7z" fill="currentColor" /><path d="M13 10v6m11 2v6m-8 2v6m17 2v6" /></g>,
-    sw10: <g><path d="m24 9 12 7v14l-12 7-12-7V16zM12 16l12 7 12-7M24 23v14" /><circle cx="24" cy="7" r="2" fill="currentColor" /><circle cx="39" cy="15" r="2" fill="currentColor" /><circle cx="9" cy="15" r="2" fill="currentColor" /><path d="m24 9 15 6M24 9 9 15" /></g>,
-    sw11: <g><path d="M13 7h16l8 8v24H13zM29 7v9h8M19 23h12m-12 6h12m-12 6h7" /><path d="m18 16 3 3 5-6" /></g>,
-    sw12: <g><rect x="8" y="8" width="32" height="32" rx="3" /><path d="M24 8v32M8 24h32" /><path d="M13 13h6m-6 6h6m10 10h6m-6 6h6" /></g>,
-    sw13: <g><path d="M24 7 38 13v10c0 9-5 14-14 18-9-4-14-9-14-18V13z" /><path d="m17 24 5 5 10-11" /><circle cx="34" cy="14" r="2" fill="currentColor" /></g>,
-    sw14: <g><path d="M13 9h7v7h-7zM28 9h7v7h-7zM13 32h7v7h-7zM28 32h7v7h-7z" /><path d="m20 13 8 22M28 13l-8 22M8 24h8m16 0h8" /></g>,
-    sw15: <g><rect x="11" y="11" width="26" height="26" rx="2" /><path d="M16 30V18h6v12m-6-6h6m4 6 5-12 5 12m-8-4h6" /><path d="M7 11v26m-2-26h4m-4 26h4M11 7h26m-26-2v4m26-4v4" /></g>,
-    sw16: <g><circle cx="16" cy="18" r="5" /><circle cx="32" cy="18" r="5" /><circle cx="24" cy="32" r="5" /><path d="m20 20 2 8m6-8-2 8m-5-10h6" /><path d="m37 8 1.5 3.5L42 13l-3.5 1.5L37 18l-1.5-3.5L32 13l3.5-1.5z" fill="currentColor" /></g>,
-  }
-  const [light, dark] = softwareMarkColors[product.id] ?? ['#baff45', '#24c5a8']
-  const mark = marks[product.id] ?? <g><path d="M10 24h28M24 10v28M15 15l18 18m0-18L15 33" /><circle cx="24" cy="24" r="15" /></g>
-  const gradientId = `mark-${product.id}-${instanceId}`
-  return <svg aria-hidden="true" width={size} height={size} viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ filter: `drop-shadow(0 2px 0 ${dark}) drop-shadow(0 5px 5px #000a)` }}>
-    <defs><linearGradient id={gradientId} x1="8" y1="8" x2="40" y2="42" gradientUnits="userSpaceOnUse"><stop stopColor="#fff" stopOpacity=".95"/><stop offset=".22" stopColor={light}/><stop offset=".72" stopColor={dark}/><stop offset="1" stopColor={light}/></linearGradient></defs>
-    <g transform="translate(0 1.6)" stroke="#050807" strokeWidth="4" opacity=".95">{mark}</g>
-    <g stroke={`url(#${gradientId})`} strokeWidth="2.8">{mark}</g>
-  </svg>
-}
-
 function ProductGrid({ products, ...actions }: { products: Product[] } & ProductActions) {
   if (!products.length) return <div className="col-span-full grid min-h-60 place-items-center rounded-2xl border border-dashed border-white/10 text-center text-sm text-[#8b8e87]">Aucun produit trouvé. Essayez une autre recherche.</div>
   return <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 xl:grid-cols-4">{products.map(product => <ProductCard key={product.id} product={product} {...actions} />)}</div>
@@ -246,7 +176,7 @@ function Home({ products, onNavigate, onOrder, onQuick, onWish, wishlist, t }: {
       <div className="absolute inset-0"><img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=2000&q=90" alt="" className="h-full w-full object-cover opacity-[.32]"/><div className="absolute inset-0 bg-gradient-to-r from-[#080909] via-[#080909]/85 to-transparent"/><div className="absolute inset-0 bg-gradient-to-t from-[#080909] via-transparent to-[#080909]/25"/></div>
       <div className="relative mx-auto flex min-h-[600px] max-w-[1440px] items-center px-6 py-16 md:min-h-[680px] md:px-14">
         <div className="max-w-[760px]">
-          <div className="mb-7 flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[.25em] text-[#c8ff35]"><span className="relative h-2 w-2 rounded-full bg-[#c8ff35] pulse-ring"/>{t.new} <span className="text-white/40">—</span> Autodesk · Canva · Adobe</div>
+          <div className="mb-7 flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[.25em] text-[#c8ff35]"><span className="relative h-2 w-2 rounded-full bg-[#c8ff35] pulse-ring"/>{t.new} <span className="text-white/40">—</span> Conception · Création · Productivité</div>
           <h1 className="font-display text-[clamp(4rem,10vw,9rem)] font-semibold leading-[.82] tracking-[-.09em]">Beyond<br/><span className="text-[#c8ff35]">the ordinary.</span></h1>
           <p className="mt-8 max-w-[440px] text-[14px] leading-7 text-[#b1b3ad] md:text-[16px]">Vos logiciels préférés, au prix affiché en dirhams. Choisissez un programme et contactez-nous sur WhatsApp pour vérifier l’offre et sa compatibilité.</p>
           <div className="mt-9 flex flex-wrap items-center gap-3"><button onClick={() => onNavigate('/shop')} className="lime-glow inline-flex items-center gap-3 rounded-full bg-[#c8ff35] px-6 py-3.5 text-[11px] font-bold uppercase tracking-[.1em] text-[#0b0d08] transition hover:scale-[1.03]">{t.discover}<ArrowRight size={15}/></button><button onClick={() => onNavigate('/about')} className="rounded-full border border-white/20 px-6 py-3.5 text-[11px] font-semibold uppercase tracking-[.08em] transition hover:border-white/60">Notre univers <ArrowUpRight size={14} className="ml-1 inline"/></button></div>
@@ -256,7 +186,7 @@ function Home({ products, onNavigate, onOrder, onQuick, onWish, wishlist, t }: {
       </div>
       <div className="absolute right-[7%] top-[18%] hidden h-64 w-64 rounded-full border border-[#c8ff35]/15 lg:block"><div className="absolute inset-7 rounded-full border border-white/[.08]"/><div className="absolute inset-[60px] rounded-full border border-[#c8ff35]/15"/><div className="absolute right-0 top-1/2 h-2 w-2 rounded-full bg-[#c8ff35] shadow-[0_0_20px_5px_rgba(200,255,53,.35)]"/></div>
     </section>
-    <div className="overflow-hidden border-b border-white/[.07] py-4"><div className="marquee-track flex w-max gap-10 whitespace-nowrap text-[10px] font-semibold uppercase tracking-[.22em] text-[#7d8078]">{Array.from({ length: 4 }, (_, i) => <span key={i} className="flex items-center gap-10">AUTODESK <span className="text-[#c8ff35]">✳</span> CANVA PRO <span className="text-[#c8ff35]">✳</span> ADOBE CREATIVE CLOUD <span className="text-[#c8ff35]">✳</span> COMMANDE WHATSAPP</span>)}</div></div>
+    <div className="overflow-hidden border-b border-white/[.07] py-4"><div className="marquee-track flex w-max gap-10 whitespace-nowrap text-[10px] font-semibold uppercase tracking-[.22em] text-[#7d8078]">{Array.from({ length: 4 }, (_, i) => <span key={i} className="flex items-center gap-10">CONCEPTION <span className="text-[#c8ff35]">✳</span> CRÉATION <span className="text-[#c8ff35]">✳</span> PRODUCTIVITÉ <span className="text-[#c8ff35]">✳</span> COMMANDE WHATSAPP</span>)}</div></div>
     <section className="mx-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-24">
       <div className="mb-8 flex items-end justify-between"><div><div className="mb-3 text-[9px] uppercase tracking-[.23em] text-[#c8ff35]">Sélection ROVZEXI · 01</div><h2 className="font-display text-3xl font-semibold tracking-[-.05em] md:text-5xl">Les plus demandés<span className="text-[#c8ff35]">.</span></h2></div><button onClick={() => onNavigate('/shop')} className="hidden items-center gap-2 text-[11px] text-[#bec0b9] transition hover:text-[#c8ff35] sm:flex">Voir les logiciels <ArrowUpRight size={15}/></button></div>
       <ProductGrid products={featured} onOrder={onOrder} onQuick={onQuick} onWish={onWish} wishlist={wishlist}/>
@@ -265,8 +195,8 @@ function Home({ products, onNavigate, onOrder, onQuick, onWish, wishlist, t }: {
     <section className="mx-auto max-w-[1440px] px-5 pb-20 md:px-10 md:pb-28">
       <div className="mb-7 flex items-end justify-between"><div><div className="mb-3 text-[9px] uppercase tracking-[.23em] text-[#c8ff35]">Trouvez l’outil qu’il vous faut</div><h2 className="font-display text-3xl font-semibold tracking-[-.05em] md:text-5xl">Votre prochain logiciel<span className="text-[#c8ff35]">.</span></h2></div></div>
       <div className="grid gap-4 md:grid-cols-2">
-        <button onClick={() => onNavigate('/electronics')} className="group relative min-h-[340px] overflow-hidden rounded-2xl border border-white/10 text-left"><img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1100&q=85" alt="Logiciels d’architecture" className="absolute inset-0 h-full w-full object-cover opacity-65 transition duration-700 group-hover:scale-105"/><div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"/><span className="absolute left-6 top-6 rounded-full border border-white/25 px-3 py-1 text-[9px] uppercase tracking-widest">01 / ARCHITECTURE</span><div className="absolute bottom-7 left-7"><h3 className="font-display text-4xl font-semibold tracking-[-.05em]">Design your<br/>next space<span className="text-[#c8ff35]">.</span></h3><span className="mt-4 inline-flex items-center gap-2 text-[11px] uppercase tracking-wider text-[#c8ff35]">Découvrir AutoCAD & Revit <ArrowRight size={14}/></span></div></button>
-        <button onClick={() => onNavigate('/creative')} className="group relative min-h-[340px] overflow-hidden rounded-2xl border border-white/10 text-left"><img src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=1100&q=85" alt="Logiciels de création graphique" className="absolute inset-0 h-full w-full object-cover opacity-65 transition duration-700 group-hover:scale-105"/><div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"/><span className="absolute left-6 top-6 rounded-full border border-white/25 px-3 py-1 text-[9px] uppercase tracking-widest">02 / CRÉATION</span><div className="absolute bottom-7 left-7"><h3 className="font-display text-4xl font-semibold tracking-[-.05em]">Make it<br/>stand out<span className="text-[#c8ff35]">.</span></h3><span className="mt-4 inline-flex items-center gap-2 text-[11px] uppercase tracking-wider text-[#c8ff35]">Explorer Canva & Adobe <ArrowRight size={14}/></span></div></button>
+        <button onClick={() => onNavigate('/electronics')} className="group relative min-h-[340px] overflow-hidden rounded-2xl border border-white/10 text-left"><img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1100&q=85" alt="Logiciels d’architecture" className="absolute inset-0 h-full w-full object-cover opacity-65 transition duration-700 group-hover:scale-105"/><div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"/><span className="absolute left-6 top-6 rounded-full border border-white/25 px-3 py-1 text-[9px] uppercase tracking-widest">01 / ARCHITECTURE</span><div className="absolute bottom-7 left-7"><h3 className="font-display text-4xl font-semibold tracking-[-.05em]">Design your<br/>next space<span className="text-[#c8ff35]">.</span></h3><span className="mt-4 inline-flex items-center gap-2 text-[11px] uppercase tracking-wider text-[#c8ff35]">Découvrir les outils d’architecture <ArrowRight size={14}/></span></div></button>
+        <button onClick={() => onNavigate('/creative')} className="group relative min-h-[340px] overflow-hidden rounded-2xl border border-white/10 text-left"><img src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=1100&q=85" alt="Logiciels de création graphique" className="absolute inset-0 h-full w-full object-cover opacity-65 transition duration-700 group-hover:scale-105"/><div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"/><span className="absolute left-6 top-6 rounded-full border border-white/25 px-3 py-1 text-[9px] uppercase tracking-widest">02 / CRÉATION</span><div className="absolute bottom-7 left-7"><h3 className="font-display text-4xl font-semibold tracking-[-.05em]">Make it<br/>stand out<span className="text-[#c8ff35]">.</span></h3><span className="mt-4 inline-flex items-center gap-2 text-[11px] uppercase tracking-wider text-[#c8ff35]">Explorer les outils créatifs <ArrowRight size={14}/></span></div></button>
       </div>
     </section>
     <section className="border-y border-white/[.07] bg-[#0c0e0d]"><div className="mx-auto grid max-w-[1440px] gap-8 px-5 py-12 sm:grid-cols-3 md:px-10">{[[MessageCircle,'Commande par WhatsApp','Pas de panier ni de paiement sur le site. Échangez directement avec nous.'],[ShieldCheck,'Détails confirmés avant achat','Vérifiez la durée, la compatibilité et le type de licence par message.'],[BadgeCheck,'Prix affichés en MAD','Le montant est indicatif. Confirmez le prix et les conditions avec le vendeur.']].map(([Icon,title,desc]) => { const I = Icon as typeof MessageCircle; return <div key={title as string} className="flex gap-4"><div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-[#c8ff35]/25 text-[#c8ff35]"><I size={18}/></div><div><div className="text-[13px] font-semibold">{title as string}</div><div className="mt-1 text-[11px] leading-5 text-[#858980]">{desc as string}</div></div></div> })}</div></section>
@@ -322,7 +252,7 @@ function ProductPage({ product, products, onOrder, onWish, wishlist, onNavigate 
       <div className="grid gap-8 lg:grid-cols-2 lg:gap-14">
         <div className="grid gap-3 sm:grid-cols-[74px_1fr]">
           <div className="order-2 flex gap-2 overflow-auto sm:order-1 sm:flex-col">{gallery.map((src, index) => <button key={src} onClick={() => setSelected(index)} className={`h-16 w-16 shrink-0 overflow-hidden rounded-lg border ${selected === index ? 'border-[#c8ff35]' : 'border-white/10'}`}><img src={src} alt="" className="h-full w-full object-cover"/></button>)}</div>
-          <div className="relative order-1 aspect-square overflow-hidden rounded-2xl bg-[#121412] sm:order-2"><img src={gallery[selected] ?? product.image} alt={`Illustration ${product.name}`} onError={e => { e.currentTarget.src = imageFallback }} className="h-full w-full object-cover opacity-90"/><div className="absolute inset-0 grid place-items-center bg-gradient-to-t from-black/45 via-transparent to-black/10"><SoftwareBrandBadge product={product} large/></div><div className="absolute bottom-4 right-4 rounded-full border border-white/15 bg-black/40 px-3 py-1.5 text-[8px] uppercase tracking-widest text-white/65">Visuel illustratif</div></div>
+          <div className="relative order-1 aspect-square overflow-hidden rounded-2xl bg-[#121412] sm:order-2"><img src={gallery[selected] ?? product.image} alt={`Illustration ${product.name}`} onError={e => { e.currentTarget.src = imageFallback }} className="h-full w-full object-cover"/></div>
         </div>
         <div className="flex flex-col justify-center">
           <div className="text-[9px] uppercase tracking-[.22em] text-[#c8ff35]">{product.category} / LOGICIEL</div>
@@ -354,7 +284,7 @@ function ProductPage({ product, products, onOrder, onWish, wishlist, onNavigate 
 }
 
 function QuickView({ product, onClose, onOrder, onDetail }: { product: Product; onClose: () => void; onOrder: (p: Product) => void; onDetail: (id: string) => void }) {
-  return <motion.div className="fixed inset-0 z-[60] grid place-items-center bg-black/75 p-4 backdrop-blur-sm" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}><motion.div initial={{ y: 18, scale: .98 }} animate={{ y: 0, scale: 1 }} exit={{ y: 18, scale: .98 }} onClick={e=>e.stopPropagation()} className="relative grid max-h-[90vh] w-full max-w-[780px] overflow-y-auto rounded-2xl border border-white/10 bg-[#111312] sm:grid-cols-2"><button aria-label="Fermer" onClick={onClose} className="absolute right-3 top-3 z-10 grid h-9 w-9 place-items-center rounded-full bg-black/50"><X size={17}/></button><div className="relative min-h-52 sm:min-h-[400px]"><img src={product.image} alt={`Illustration ${product.name}`} className="absolute inset-0 h-full w-full object-cover opacity-50"/><div className="absolute inset-0 grid place-items-center bg-black/25"><SoftwareBrandBadge product={product} large/></div></div><div className="flex flex-col justify-center p-6 sm:p-9"><div className="text-[9px] uppercase tracking-widest text-[#c8ff35]">{product.category}</div><h2 className="mt-3 font-display text-2xl font-semibold">{product.name}</h2><div className="mt-3 flex gap-1 text-[#c8ff35]"><Star size={13} className="fill-current"/><span className="text-xs">{product.rating} <span className="text-[#8b8e87]">({product.reviews} avis)</span></span></div><div className="mt-5 font-display text-xl font-semibold">{money(product.price)}</div><p className="mt-4 text-xs leading-6 text-[#a3a69f]">{product.description}</p><ul className="mt-3 space-y-2">{product.highlights.slice(0, 2).map(item => <li key={item} className="flex gap-2 text-[10px] leading-5 text-[#bdc0b8]"><Check size={13} className="mt-0.5 shrink-0 text-[#c8ff35]"/>{item}</li>)}</ul><button onClick={()=>onOrder(product)} className="mt-6 rounded-full bg-[#c8ff35] py-3 text-xs font-bold text-black">Commander sur WhatsApp <MessageCircle size={14} className="ml-1 inline"/></button><button onClick={()=>onDetail(product.id)} className="mt-3 text-[10px] uppercase tracking-widest text-[#aeb0aa] hover:text-[#c8ff35]">Voir le guide complet <ArrowRight size={13} className="ml-1 inline"/></button></div></motion.div></motion.div>
+  return <motion.div className="fixed inset-0 z-[60] grid place-items-center bg-black/75 p-4 backdrop-blur-sm" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}><motion.div initial={{ y: 18, scale: .98 }} animate={{ y: 0, scale: 1 }} exit={{ y: 18, scale: .98 }} onClick={e=>e.stopPropagation()} className="relative grid max-h-[90vh] w-full max-w-[780px] overflow-y-auto rounded-2xl border border-white/10 bg-[#111312] sm:grid-cols-2"><button aria-label="Fermer" onClick={onClose} className="absolute right-3 top-3 z-10 grid h-9 w-9 place-items-center rounded-full bg-black/50"><X size={17}/></button><div className="relative min-h-52 sm:min-h-[400px]"><img src={product.image} alt={`Illustration ${product.name}`} className="absolute inset-0 h-full w-full object-cover"/></div><div className="flex flex-col justify-center p-6 sm:p-9"><div className="text-[9px] uppercase tracking-widest text-[#c8ff35]">{product.category}</div><h2 className="mt-3 font-display text-2xl font-semibold">{product.name}</h2><div className="mt-3 flex gap-1 text-[#c8ff35]"><Star size={13} className="fill-current"/><span className="text-xs">{product.rating} <span className="text-[#8b8e87]">({product.reviews} avis)</span></span></div><div className="mt-5 font-display text-xl font-semibold">{money(product.price)}</div><p className="mt-4 text-xs leading-6 text-[#a3a69f]">{product.description}</p><ul className="mt-3 space-y-2">{product.highlights.slice(0, 2).map(item => <li key={item} className="flex gap-2 text-[10px] leading-5 text-[#bdc0b8]"><Check size={13} className="mt-0.5 shrink-0 text-[#c8ff35]"/>{item}</li>)}</ul><button onClick={()=>onOrder(product)} className="mt-6 rounded-full bg-[#c8ff35] py-3 text-xs font-bold text-black">Commander sur WhatsApp <MessageCircle size={14} className="ml-1 inline"/></button><button onClick={()=>onDetail(product.id)} className="mt-3 text-[10px] uppercase tracking-widest text-[#aeb0aa] hover:text-[#c8ff35]">Voir le guide complet <ArrowRight size={13} className="ml-1 inline"/></button></div></motion.div></motion.div>
 }
 
 function AboutPage({ onNavigate }: { onNavigate: (p: string) => void }) {
@@ -403,9 +333,7 @@ function AdminPage({ products, setProducts, orders, setOrders, setToast }: { pro
       categoryKey: String(d.get('categoryKey')) as Product['categoryKey'], price: Number(d.get('price')),
       oldPrice: Number(d.get('oldPrice')) || undefined, rating: existing?.rating ?? 4.8, reviews: existing?.reviews ?? 0,
       stock: Number(d.get('stock')), image: String(d.get('image')) || imageFallback, description: String(d.get('description')),
-      brand: existing?.brand ?? 'ROVZEXI', brandMark: existing?.brandMark ?? String(d.get('name')).trim().slice(0, 2).toUpperCase(),
-      accent: existing?.accent ?? '#c8ff35', highlights: existing?.highlights ?? defaultProductGuidance.highlights,
-      brandImage: existing?.brandImage,
+      highlights: existing?.highlights ?? defaultProductGuidance.highlights,
       howToUse: existing?.howToUse ?? defaultProductGuidance.howToUse,
     }
     setProducts(rows=>existing?rows.map(p=>p.id===existing.id?product:p):[product,...rows])
