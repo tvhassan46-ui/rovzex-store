@@ -158,9 +158,7 @@ function ProductCard({ product, onOrder, onQuick, onWish, wishlist }: { product:
   return <motion.article layout className="product-card group relative overflow-hidden rounded-[17px] border border-white/[.08] bg-[#111312]">
     <button onClick={() => onQuick(product)} className="relative block aspect-[.91] w-full overflow-hidden bg-[#1a1c19] text-left" aria-label={`Aperçu rapide : ${product.name}`}>
       <img src={product.image} alt={`Illustration ${product.name}`} onError={e => { e.currentTarget.src = imageFallback }} className="product-image h-full w-full object-cover opacity-90" />
-      <div className="pointer-events-none absolute inset-0 grid place-items-center bg-gradient-to-t from-black/50 via-transparent to-black/10">
-        <SoftwareBrandBadge product={product}/>
-      </div>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/10" />
       {product.tag && <span className="absolute left-3 top-3 rounded-full bg-[#c8ff35] px-2.5 py-1 text-[8px] font-bold tracking-[.12em] text-[#10120c]">{product.tag}</span>}
       <span className="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full border border-white/20 bg-black/35 text-white backdrop-blur-md" onClick={e => { e.stopPropagation(); onWish(product.id) }}><Heart size={15} className={wishlist.includes(product.id) ? 'fill-[#c8ff35] text-[#c8ff35]' : ''}/></span>
       <span className="absolute bottom-3 left-3 right-3 translate-y-2 rounded-lg bg-white px-3 py-2.5 text-center text-[11px] font-semibold text-black opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">{'Aperçu rapide  ↗'}</span>
