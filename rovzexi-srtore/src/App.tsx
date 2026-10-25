@@ -175,16 +175,23 @@ function ProductCard({ product, onOrder, onQuick, onWish, wishlist }: { product:
 
 function SoftwareBrandBadge({ product, large = false }: { product: Product; large?: boolean }) {
   const [light, dark] = softwareMarkColors[product.id] ?? ['#baff45', '#24c5a8']
+  const isCustomLogo = Boolean(product.brandImage)
+
   return <div className={`flex items-center ${large ? 'gap-4' : 'flex-col gap-2'}`}>
-    <span style={{ color: light, borderColor: `${light}88`, background: product.brandImage ? '#f8f8f8' : `linear-gradient(145deg, ${light}2e, #131715 60%, ${dark}55)`, boxShadow: `inset 2px 2px 5px #ffffff35, inset -4px -5px 8px #0000008c, 0 12px 32px ${dark}70` }} className={`grid shrink-0 place-items-center overflow-hidden border backdrop-blur-xl ${large ? 'h-[84px] w-[92px] rounded-2xl p-1.5' : 'h-[68px] w-[72px] rounded-[18px] p-1'}`}>
-      {product.brandImage
-        ? <img src={product.brandImage} alt={`Logo fourni pour ${product.name}`} className="max-h-full max-w-full object-contain"/>
+    <span style={{
+      color: light,
+      borderColor: `${light}88`,
+      background: isCustomLogo ? 'linear-gradient(135deg, rgba(255,255,255,0.96), rgba(234,240,236,0.96) 50%, rgba(200,255,53,0.15))' : `linear-gradient(145deg, ${light}2e, #131715 60%, ${dark}55)`,
+      boxShadow: isCustomLogo ? `0 16px 28px ${dark}40, inset 2px 2px 4px rgba(255,255,255,.9), inset -8px -8px 16px rgba(0,0,0,.18)` : `inset 2px 2px 5px #ffffff35, inset -4px -5px 8px #0000008c, 0 12px 32px ${dark}70`,
+    }} className={`grid shrink-0 place-items-center overflow-hidden border backdrop-blur-xl ${large ? 'h-[84px] w-[92px] rounded-2xl p-1.5' : 'h-[68px] w-[72px] rounded-[18px] p-1'}`}>
+      {isCustomLogo
+        ? <img src={product.brandImage} alt={`Logo fourni pour ${product.name}`} className="max-h-full max-w-full object-contain p-1.5 drop-shadow-[0_8px_10px_rgba(12,16,12,0.16)]"/>
         : <SoftwareMark product={product} size={large ? 52 : 44}/>}
     </span>
     <span className={large ? 'text-left' : 'text-center'}>
-      {large && <span className="mb-1 block text-[8px] uppercase tracking-[.2em] text-white/50">{product.brandImage ? 'Image fournie' : 'Symbole original'}</span>}
+      {large && <span className="mb-1 block text-[8px] uppercase tracking-[.2em] text-white/50">{product.brandImage ? 'Logo officiel' : 'Symbole original'}</span>}
       <span className={`block font-display font-semibold tracking-[.12em] text-white ${large ? 'text-[11px]' : 'text-[9px]'}`}>{product.brand}</span>
-      {!large && <span className="mt-1 block text-[8px] text-white/55">{product.brandImage ? 'Image fournie' : 'Création ROVZEXI · non officiel'}</span>}
+      {!large && <span className="mt-1 block text-[8px] text-white/55">{product.brandImage ? 'Logo additionnel' : 'Création ROVZEXI · non officiel'}</span>}
     </span>
   </div>
 }
