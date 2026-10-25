@@ -1,0 +1,76 @@
+export type Product = {
+  id: string
+  name: string
+  category: string
+  categoryKey: 'electronics' | 'moroccan'
+  price: number
+  oldPrice?: number
+  rating: number
+  reviews: number
+  stock: number
+  image: string
+  tag?: string
+  description: string
+  brand: string
+  brandMark: string
+  accent: string
+  brandImage?: string
+  highlights: string[]
+  howToUse: string[]
+}
+
+const photo = (id: string, width = 900) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=85`
+
+const catalogue: Omit<Product, 'brand' | 'brandMark' | 'accent' | 'highlights' | 'howToUse'>[] = [
+  { id:'sw1', name:'Autodesk AutoCAD', category:'CAO & architecture', categoryKey:'electronics', price:249, oldPrice:299, rating:4.9, reviews:128, stock:20, image:photo('photo-1581091226825-a6a2a5aee158'), tag:'POPULAIRE', description:'Logiciel de conception et de dessin assisté par ordinateur. Contactez-nous sur WhatsApp pour confirmer la durée, le type de licence et la compatibilité avant toute commande.' },
+  { id:'sw2', name:'Canva Pro', category:'Création & design', categoryKey:'electronics', price:99, oldPrice:129, rating:4.9, reviews:204, stock:30, image:photo('photo-1558655146-d09347e92766'), tag:'BESTSELLER', description:'Outils créatifs avancés, modèles premium et fonctionnalités collaboratives. Écrivez-nous pour connaître la formule et la durée disponibles.' },
+  { id:'sw4', name:'Autodesk 3ds Max', category:'CAO & 3D', categoryKey:'electronics', price:279, oldPrice:329, rating:4.8, reviews:54, stock:10, image:photo('photo-1634017839464-5c339ebe3cb4'), description:'Création 3D, visualisation et animation pour vos projets. Contactez-nous pour vérifier l’édition et la durée disponibles.' },
+  { id:'sw5', name:'Autodesk Maya', category:'CAO & 3D', categoryKey:'electronics', price:279, rating:4.7, reviews:42, stock:10, image:photo('photo-1618005182384-a83a8bd57fbe'), description:'Outils professionnels de modélisation et d’animation 3D. Écrivez-nous pour confirmer les détails de la licence proposée.' },
+  { id:'sw6', name:'Autodesk Fusion', category:'CAO & ingénierie', categoryKey:'electronics', price:199, rating:4.7, reviews:38, stock:15, image:photo('photo-1581092160562-40aa08e78837'), description:'Conception, ingénierie et fabrication assistées dans un même environnement. Durée et compatibilité à confirmer via WhatsApp.' },
+  { id:'sw7', name:'Adobe Photoshop', category:'Création & design', categoryKey:'electronics', price:149, oldPrice:179, rating:4.8, reviews:116, stock:20, image:photo('photo-1545235617-9465d2a55698'), description:'Retouche photo et création graphique avec les outils de référence. Contactez-nous pour connaître la formule et la durée disponibles.' },
+  { id:'sw8', name:'Adobe Illustrator', category:'Création & design', categoryKey:'electronics', price:149, rating:4.7, reviews:73, stock:15, image:photo('photo-1550859492-d5da9d8e45f3'), description:'Création vectorielle pour logos, illustrations et identité visuelle. Licence et compatibilité à confirmer avec nous.' },
+  { id:'sw9', name:'Adobe Premiere Pro', category:'Vidéo & audio', categoryKey:'electronics', price:159, rating:4.7, reviews:62, stock:15, image:photo('photo-1574717024653-61fd2cf4d44d'), description:'Montage vidéo et outils créatifs pour vos projets. Écrivez-nous pour vérifier les options disponibles avant de commander.' },
+  { id:'sw10', name:'Adobe Creative Cloud', category:'Création & design', categoryKey:'electronics', price:249, oldPrice:299, rating:4.9, reviews:95, stock:12, image:photo('photo-1498050108023-c5249f4df085'), tag:'SUITE', description:'Suite d’applications créatives Adobe. Demandez-nous sur WhatsApp quelles applications, durée et conditions sont incluses dans l’offre.' },
+  { id:'sw11', name:'Microsoft 365', category:'Bureautique', categoryKey:'electronics', price:119, rating:4.6, reviews:87, stock:25, image:photo('photo-1497366216548-37526070297c'), description:'Applications et outils de productivité Microsoft. Contactez-nous pour confirmer la formule, la durée et le nombre d’appareils.' },
+  { id:'sw12', name:'Windows 11 Pro', category:'Système & sécurité', categoryKey:'electronics', price:199, rating:4.7, reviews:81, stock:18, image:photo('photo-1517336714731-489689fd1ca8'), description:'Système Windows pour les usages professionnels. Vérifiez la compatibilité de votre appareil et le type de licence avec nous avant achat.' },
+  { id:'sw13', name:'Antivirus — protection 1 an', category:'Système & sécurité', categoryKey:'electronics', price:89, oldPrice:119, rating:4.5, reviews:49, stock:25, image:photo('photo-1563013544-824ae1b704d3'), description:'Protection numérique pour vos appareils. Contactez-nous pour connaître l’éditeur, le nombre d’appareils et la durée exacte.' },
+  { id:'sw14', name:'CapCut Pro', category:'Vidéo & audio', categoryKey:'electronics', price:89, rating:4.7, reviews:92, stock:20, image:photo('photo-1492619375914-88005aa9e8fb'), description:'Outils de montage et fonctionnalités premium pour vos vidéos. Offre et durée à confirmer directement avec nous.' },
+  { id:'sw15', name:'Autodesk AutoCAD LT', category:'CAO & architecture', categoryKey:'electronics', price:179, rating:4.6, reviews:33, stock:12, image:photo('photo-1503387762-592deb58ef4e'), description:'Dessin technique 2D pour vos projets de conception. Contactez-nous pour confirmer la formule et la compatibilité.' },
+  { id:'sw16', name:'Canva Teams', category:'Création & design', categoryKey:'electronics', price:149, rating:4.8, reviews:58, stock:15, image:photo('photo-1521737711867-e3b97375f902'), description:'Espace créatif collaboratif pour équipes. Écrivez-nous pour connaître les places, la durée et les conditions de l’offre.' },
+]
+
+const softwareGuides: Record<string, Pick<Product, 'brand' | 'brandMark' | 'accent' | 'highlights' | 'howToUse'>> = {
+  sw1: { brand:'AUTODESK', brandMark:'A', accent:'#f05a38', highlights:['Dessin technique 2D et modélisation 3D','Calques, blocs et annotations','Export de plans dans plusieurs formats'], howToUse:['Créez un dessin et réglez les unités ainsi que l’échelle.','Tracez la géométrie avec les outils ligne, polyligne et forme.','Organisez le plan avec des calques, des cotes et des annotations.','Vérifiez l’aperçu puis exportez ou imprimez le dessin.'] },
+  sw2: { brand:'CANVA', brandMark:'C', accent:'#40d9c2', highlights:['Modèles pour présentations et réseaux sociaux','Éditeur visuel simple par glisser-déposer','Outils de collaboration et bibliothèque créative'], howToUse:['Choisissez un format ou un modèle adapté à votre projet.','Ajoutez vos textes, images, couleurs et éléments graphiques.','Ajustez la mise en page puis partagez un aperçu pour relecture.','Téléchargez le visuel dans le format souhaité.'] },
+  sw4: { brand:'AUTODESK', brandMark:'3D', accent:'#f05a38', highlights:['Modélisation et visualisation 3D','Matériaux, éclairage et rendu','Animation et outils de présentation'], howToUse:['Démarrez une scène et choisissez les unités de travail.','Créez ou importez les objets puis organisez-les dans la scène.','Appliquez matériaux et éclairage, puis testez un rendu basse résolution.','Réglez la caméra et exportez l’image ou l’animation finale.'] },
+  sw5: { brand:'AUTODESK', brandMark:'M', accent:'#f05a38', highlights:['Modélisation et animation 3D','Rigging et animation de personnages','Éclairage et rendu de scènes'], howToUse:['Créez une scène et importez ou modélisez vos objets.','Organisez la géométrie puis préparez les matériaux.','Pour animer, définissez les contrôleurs et les images clés.','Prévisualisez la séquence, réglez le rendu et exportez.'] },
+  sw6: { brand:'AUTODESK', brandMark:'F', accent:'#f05a38', highlights:['Conception 3D de pièces et d’assemblages','Esquisses paramétriques et outils de simulation','Préparation de fabrication et fichiers techniques'], howToUse:['Créez un nouveau design et sélectionnez le plan d’esquisse.','Dessinez un profil coté puis utilisez extrusion ou révolution.','Assemblez les composants et vérifiez les mouvements souhaités.','Enregistrez le design puis exportez le format adapté à la fabrication.'] },
+  sw7: { brand:'ADOBE', brandMark:'Ps', accent:'#38a9ff', highlights:['Retouche et composition d’images par calques','Masques, sélections et corrections couleur','Outils pour visuels web et impression'], howToUse:['Ouvrez une image et gardez une copie de l’original.','Faites vos corrections sur des calques séparés.','Utilisez masques et sélections pour ajuster des zones précises.','Enregistrez le document de travail puis exportez une copie finale.'] },
+  sw8: { brand:'ADOBE', brandMark:'Ai', accent:'#ff9b36', highlights:['Illustrations vectorielles redimensionnables','Création de logos, icônes et mises en page','Tracés, formes, typographie et palettes couleur'], howToUse:['Créez un document avec le format de plan de travail voulu.','Dessinez les formes et tracés, puis ajustez points et courbes.','Ajoutez texte et couleurs en gardant les éléments bien organisés.','Enregistrez la source vectorielle et exportez les formats nécessaires.'] },
+  sw9: { brand:'ADOBE', brandMark:'Pr', accent:'#9d83ff', highlights:['Montage vidéo sur une timeline multipiste','Transitions, titres et réglage du son','Outils de correction couleur et export'], howToUse:['Créez un projet et importez les vidéos, images et sons.','Placez les séquences sur la timeline et coupez les passages inutiles.','Ajoutez titres, transitions et corrections audio ou couleur.','Prévisualisez le montage puis exportez avec le format souhaité.'] },
+  sw10: { brand:'ADOBE', brandMark:'CC', accent:'#f05a83', highlights:['Accès à plusieurs outils de création Adobe','Flux de travail entre image, vidéo et design','Gestion centralisée des applications et fichiers'], howToUse:['Confirmez d’abord quelles applications et quels services sont inclus.','Choisissez l’application correspondant au projet à réaliser.','Créez votre document et utilisez les outils adaptés au besoin.','Enregistrez la source et exportez depuis l’application utilisée.'] },
+  sw11: { brand:'MICROSOFT', brandMark:'365', accent:'#59a7ff', highlights:['Documents, feuilles de calcul et présentations','Outils de collaboration et de productivité','Applications disponibles selon la formule choisie'], howToUse:['Vérifiez les applications incluses dans votre formule.','Créez un document, un classeur ou une présentation.','Rédigez et organisez votre contenu avec les outils intégrés.','Enregistrez, exportez ou partagez le fichier selon vos besoins.'] },
+  sw12: { brand:'WINDOWS', brandMark:'11', accent:'#46c4fa', highlights:['Fonctions Windows destinées aux usages professionnels','Outils de gestion et de sécurité selon l’édition','Compatibilité matérielle à vérifier avant installation'], howToUse:['Vérifiez la configuration requise et sauvegardez vos fichiers.','Confirmez que l’édition et la licence conviennent à votre appareil.','Suivez l’installation officielle de Windows et les instructions affichées.','Terminez les mises à jour et vérifiez l’activation via les canaux officiels.'] },
+  sw13: { brand:'SECURITY', brandMark:'AV', accent:'#b9ec5c', highlights:['Protection contre les menaces selon l’éditeur','Analyses à la demande et planifiées','Périmètre et nombre d’appareils à confirmer'], howToUse:['Confirmez le nom de l’éditeur, la durée et les appareils couverts.','Téléchargez le logiciel uniquement depuis le site officiel de l’éditeur.','Installez-le et suivez les consignes de configuration officielles.','Activez les mises à jour automatiques et lancez une première analyse.'] },
+  sw14: { brand:'CAPCUT', brandMark:'C', accent:'#d7ff52', highlights:['Montage vidéo rapide sur timeline','Titres, effets et outils audio','Export de formats adaptés aux réseaux sociaux'], howToUse:['Créez un projet et importez vos vidéos ou photos.','Disposez les clips dans l’ordre et ajustez leur durée.','Ajoutez titres, transitions, musique ou sous-titres.','Prévisualisez et exportez aux dimensions de la plateforme cible.'] },
+  sw15: { brand:'AUTODESK', brandMark:'LT', accent:'#f05a38', highlights:['Dessin technique 2D et documentation de plans','Calques, cotations et annotations','Flux de travail centré sur les dessins 2D'], howToUse:['Créez un dessin et choisissez unités et échelle.','Tracez les éléments du plan et classez-les par calque.','Ajoutez cotes, textes et annotations techniques.','Vérifiez la mise en page puis exportez ou imprimez le plan.'] },
+  sw16: { brand:'CANVA', brandMark:'CT', accent:'#40d9c2', highlights:['Création visuelle partagée en équipe','Modèles et éléments de marque selon la formule','Commentaire et collaboration sur les créations'], howToUse:['Confirmez le nombre de membres et les fonctions incluses.','Créez un design partagé ou partez d’un modèle d’équipe.','Invitez vos collaborateurs et définissez leurs accès.','Recueillez les commentaires, finalisez puis exportez le design.'] },
+}
+
+const providedLogos: Record<string, string> = {
+  sw1: '/program-logos/autodesk.jfif',
+  sw2: '/program-logos/canva-pro-wide.jfif',
+  sw4: '/program-logos/autodesk-3ds-max.jfif',
+  sw5: '/program-logos/autodesk.jfif',
+  sw6: '/program-logos/autodesk.jfif',
+  sw15: '/program-logos/autodesk.jfif',
+  sw16: '/program-logos/canva-pro-icon.jfif',
+}
+
+export const initialProducts: Product[] = catalogue.map(product => ({
+  ...product,
+  ...softwareGuides[product.id],
+  brandImage: providedLogos[product.id],
+}))
+
+export const categories = ['Tout', 'CAO & architecture', 'CAO & 3D', 'CAO & ingénierie', 'Création & design', 'Vidéo & audio', 'Bureautique', 'Système & sécurité']
